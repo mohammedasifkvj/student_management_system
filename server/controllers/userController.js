@@ -4,21 +4,23 @@ import bcryptjs from 'bcryptjs';
 import User from '../models/studentModel.js';
 import Task from '../models/taskModel.js';
 
-import errorHandler  from '../middlewares/errorHandler.js';
-
 // Stdent login
 export const signin = async (req, res, next) => {
     const { email, password } = req.body;
     try {
         const validUser = await User.findOne({ email });
-        if (!validUser) return next(errorHandler(404, 'Student not found'));
+        if (!validUser) {
+            return res.status(400).json({ success: false, message: ' Student not found' });
+        }
 
         const validPassword = bcryptjs.compareSync(password, validUser.password);
-        if (!validPassword) return next(errorHandler(401, 'wrong credentials'));
+        if (!validPassword){
+            return res.status(400).json({ success: false, message: ' wrong credentials' });
+        }
 
         const token = jwt.sign({ id: validUser._id, role: 'student' }, process.env.JWT_SECRET);
         const { password: hashedPassword, ...rest } = validUser._doc;
-        const expiryDate = new Date(Date.now() + 36000000); // 10 hour
+        const expiryDate = new Date(Date.now() + 3600000); // 1 hour
         res
             .cookie('access_token', token, { httpOnly: true, expires: expiryDate })
             .status(200)
@@ -30,7 +32,7 @@ export const signin = async (req, res, next) => {
 
 //fetch tasks
 export const fetchTasks=async (req,res)=>{
-    const studentId=req.params.studentId;
+    const {studentId}=req.params;
     // console.log("StId",studentId);
     try {
         const tasks = await Task.find({ student: studentId});
