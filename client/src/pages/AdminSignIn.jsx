@@ -24,18 +24,20 @@ export default function AdminSignIn() {
       const res = await fetch('/api/admin/signin', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
-      });
+        body: JSON.stringify( formData)
+      }); 
       const data = await res.json();
+      // console.log(data,'this is data ');
       if (data.success === false) {
         dispatch(signInFailure(data));
         return;
       }
       dispatch(signInSuccess(data));
-      navigate('/'); //write route for Admin Login
+      navigate('/');
     } catch (error) {
+      // console.log(error instanceof Error ? error.message:String(error));
       dispatch(signInFailure(error));
     }
   };
@@ -65,7 +67,7 @@ export default function AdminSignIn() {
         </button>
       </form>
       <p className='text-red-700 mt-5'>
-        {error ? error.message || 'Something went wrong!' : ''}
+        {error ? error.message : ''}
       </p>
     </div>
   );

@@ -40,15 +40,19 @@ const userSlice = createSlice({
           state.loading = false;
           state.error = action.payload;
         },
-        deleteUserStart: (state) => {
+        showTaskStart: (state) => {
           state.loading = true;
         },
-        deleteUserSuccess: (state, action) => {
-          state.users = state.users.filter((user) => user.id !== action.payload); // Remove deleted user
-          state.loading = false;
-          state.error = false;
-        },        
-        deleteUserFailure: (state, action) => {
+        showTaskSuccess: (state, action) => {
+          const userId = action.payload;
+          const user = state.users.find(user => user.id === userId);
+          if (user) {
+            // Optionally mark the user as having tasks
+            user.hasTasks = true;
+          }
+          // Do not remove the user from state.users
+        },       
+        showTaskFailure: (state, action) => {
           state.loading = false;
           state.error = action.payload;
         },
@@ -66,10 +70,10 @@ export const { getUser ,
   signInFailure,
   assignTaskStart,
   assignTaskSuccess,
-  deleteUserStart,
-  deleteUserSuccess,
+  showTaskStart,
+  showTaskSuccess,
   assignTaskFailure,
-  deleteUserFailure,
+  showTaskFailure,
   signOut
 } = userSlice.actions;
 export default userSlice.reducer;

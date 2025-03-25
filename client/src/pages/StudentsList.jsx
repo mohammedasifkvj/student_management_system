@@ -2,12 +2,11 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-
 import {
   getUser,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
+  showTaskStart,
+  showTaskSuccess,
+  showTaskFailure,
 } from '../redux/admin/adminSlice';
 
 export default function StudentsList() {
@@ -16,39 +15,36 @@ export default function StudentsList() {
 
   const [showTaskPopup, setshowTaskPopup] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [tasks, setTasks] = useState([]); // State to store tasks for selected user
 
-  // Fetch users
+  // Fetch Students
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStudents = async () => {
       try {
-        const response = await axios.get('/api/admin/list');
-        dispatch(getUser(response.data)); // Dispatch the action to store users
-        console.log(response.data);
-        
+        const response = await axios.get('/api/admin/studentsList');
+        dispatch(getUser(response.data));
+        // console.log(response.data);
       } catch (error) {
         console.log('Error fetching users:', error);
       }
     };
 
-    fetchData();
+    fetchStudents();
   }, [dispatch]);
 
-  // Delete user
-  const handleShowTask = async (userId) => {
-    try {
-      dispatch(deleteUserStart());
-      await axios.delete(`/api/admin/deleteUser/${userId}`);
-      dispatch(deleteUserSuccess(userId));
-      setshowTaskPopup(false);
-    } catch (error) {
-      dispatch(deleteUserFailure(error));
-      console.log('Error deleting user:', error);
-    }
-  };
-
-  // Show delete popup
-  const showTasks = (user) => {
+  // fetch tasks and show the popup for the selected user
+  const showTasks = async (user) => {
     setSelectedUser(user);
+    try {
+      dispatch(showTaskStart());
+      const response = await axios.get(`/api/admin/showTask/${user.id}`);
+      setTasks(response.data.tasks);
+      dispatch(showTaskSuccess(user.id));
+    } catch (error) {
+      dispatch(showTaskFailure(error));
+      console.log('Error fetching tasks:', error);
+      setTasks([]);
+    }
     setshowTaskPopup(true);
   };
 
@@ -65,7 +61,6 @@ export default function StudentsList() {
             <tr className="bg-slate-700 text-white">
               <th className="border border-gray-300 px-0 py-0">Sl. Number</th>
               <th className="border border-gray-300 px-4 py-2">Name</th>
-              {/* <th className="border border-gray-300 px-4 py-2">Email</th> */}
               <th className="border border-gray-300 px-4 py-2">Department</th>
               <th className="border border-gray-300 px-4 py-2">Task</th>
             </tr>
@@ -73,10 +68,13 @@ export default function StudentsList() {
           <tbody>
             {users.map((user, index) => (
               <tr key={user.id} className="odd:bg-gray-100 even:bg-white">
-                <td className="border border-gray-300 px-4 py-2 text-center">{index + 1}</td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {index + 1}
+                </td>
                 <td className="border border-gray-300 px-4 py-2">{user.name}</td>
-                {/* <td className="border border-gray-300 px-4 py-2">{user.email}</td> */}
-                <td className="border border-gray-300 px-4 py-2">{user.department}</td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {user.department}
+                </td>
                 <td className="border border-gray-300 px-4 py-2 flex gap-2 justify-center">
                   <Link to={`/assignTask/${user.id}`}>
                     <button className="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600">
@@ -96,26 +94,49 @@ export default function StudentsList() {
         </table>
       </div>
 
-      {/* Task show Popup */}
+      {/* Task Popup */}
       {showTaskPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-lg w-1/3">
-            <h2 className="text-xl font-bold mb-4 text-center">Delete User</h2>
-            <p className="text-gray-700 text-center mb-6">
-              Are you sure you want to delete user <strong>{selectedUser.name}</strong> ?
-            </p>
-            <div className="flex justify-around">
+            <h2 className="text-xl font-bold mb-4 text-center">
+              Assigned Tasks for {selectedUser?.name}
+            </h2>
+
+            {tasks && tasks.length > 0 ? (
+              <ul className="space-y-4 ">
+                {tasks.map((task) => (
+                  <li key={task._id} className="p-4 border rounded-lg text-center">
+                    <h3 className="text-lg font-semibold">{task.taskName}</h3>
+                    <p className="text-gray-600">{task.description}</p>
+                    {task.dueTime && (
+                      <p className="text-sm text-gray-500">
+                        Due : {new Date(task.dueTime).toLocaleDateString()}
+                      </p>
+                    )}
+                    {/* Status with color coding */}
+                    <span
+                      className={`inline-block px-3 py-1 text-sm font-semibold text-white rounded-full
+                        ${task.status === 'pending' ? 'bg-yellow-500' : ''}
+                        ${task.status === 'completed' ? 'bg-green-500' : ''}
+                        ${task.status === 'overdue' ? 'bg-red-500' : ''}`}
+                    >
+                      {task.status.charAt(0).toUpperCase() +
+                        task.status.slice(1)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-500">No tasks assigned.</p>
+            )}
+
+            {/* Close Button */}
+            <div className="flex justify-center mt-6">
               <button
                 onClick={() => setshowTaskPopup(false)}
                 className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
               >
                 Close
-              </button>
-              <button
-                onClick={() => handleShowTask(selectedUser.id)}
-                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-              >
-                Delete
               </button>
             </div>
           </div>

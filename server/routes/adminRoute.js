@@ -2,21 +2,23 @@ import express from 'express';
 
 import { verifyAdmin } from '../middlewares/verifyToken.js';
 import {
+  adminSignup,
   adminSignin,
   fetchStudents,
   createStudent,
-  fetchData,
+  fetchTask,
   assignTask,
-  deleteUser
+  signout
 } from '../controllers/adminController.js';
 
 const router = express.Router();
 
+router.post('/signup', adminSignup);
 router.post('/signin',adminSignin)
-router.get('/list',verifyAdmin, fetchStudents);
+router.get('/studentsList',verifyAdmin, fetchStudents);
 router.post('/createStudent',verifyAdmin, createStudent);
-router.get('/getUser/:id',verifyAdmin, fetchData);
 router.post('/assignTask/:id', verifyAdmin, assignTask);
-router.delete('/deleteUser/:id', verifyAdmin, deleteUser);
+router.get('/showTask/:id',verifyAdmin, fetchTask);
+router.get('/signout', signout);
 
 export default router;

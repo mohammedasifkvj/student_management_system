@@ -24,7 +24,7 @@ export const verifyAdmin = (req, res, next) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return next(errorHandler(403, 'Token is not valid!'));
 
-        // Check if the user role is "admin"
+        // Check role is "admin"
         if (user.role !== 'admin') {
             return next(errorHandler(403, 'Access Denied:You is Not an Admin!'));
         }

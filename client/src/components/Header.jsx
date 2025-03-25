@@ -1,7 +1,20 @@
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {signOut} from '../redux/user/userSlice.js';
 
 export default function Header() {
+
+  const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/student/signout');
+      dispatch(signOut())
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const { currentUser } = useSelector((state) => state.user);
   return (
     <div className='bg-slate-200'>
@@ -27,12 +40,20 @@ export default function Header() {
               <li></li>
             )}
           </Link>
-          <Link to='/profile'>
-            {currentUser ? (
-              // <img src={currentUser.profilePicture} alt='profile' className='h-7 w-7 rounded-full object-cover' />
-              <li>Profile</li>
+          <Link to='/task'>
+            {currentUser && currentUser.isStudent ? (
+              <li>Tasks</li>
             ) : (
-              <li>Stdent Login</li>
+              <li></li>
+            )}
+          </Link>
+          <Link to='/sign-in'>
+            {currentUser ? (
+              <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>
+              Sign out
+            </span>
+            ) : (
+              <li>Student Login</li>
             )}
           </Link>
         </ul>

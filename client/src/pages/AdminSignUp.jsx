@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const SignUp=()=> {
+const AdminSignUp=()=> {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
   const [errors, setErrors] = useState({ username: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
@@ -21,9 +21,8 @@ const SignUp=()=> {
         }
         return '';
       case 'password':
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordRegex.test(value)) {
-          return 'Password must be least 8 characters long and include letter,numbers and special charecter.';
+        if (value.trim().length < 4) {
+          return 'Passsword must be at least 4 characters long and cannot be only spaces.';
         }
         return '';
       default:
@@ -49,7 +48,7 @@ const SignUp=()=> {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await fetch('/api/student/signup', {
+      const res = await fetch('/api/admin/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,4 +124,4 @@ const SignUp=()=> {
     </div>
   );
 }
-export default SignUp
+export default AdminSignUp

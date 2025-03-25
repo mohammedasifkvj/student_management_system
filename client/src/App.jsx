@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Header from './components/Header';
-import PrivateRoute from './components/PrivateRoute';
+import Header from './components/Header.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';
 
+import AdminSignUp from './pages/AdminSignUp';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import Profile from './pages/Profile';
+import Tasks from './pages/Tasks';
 
 import AdminSignIn from './pages/AdminSignIn';
 import StudentsList from './pages/StudentsList';
@@ -20,10 +20,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/admin-signIn' element={<AdminSignIn />} />
+        <Route path='/sign-up' element={<AdminSignUp />} />
         <Route path='/sign-in' element={<SignIn />} />
-        <Route path='/sign-up' element={<SignUp />} />
         <Route element={<PrivateRoute />}>
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/task' element={<Tasks />} />
           <Route path='/list' element={<StudentsList />} />
           <Route path='/createStudent' element={<CreateStudent />} />
           <Route path='/assignTask/:id' element={<AssignTask />} />

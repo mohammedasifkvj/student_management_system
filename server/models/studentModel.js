@@ -20,9 +20,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isAdmin: {
+    isStudent: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   { timestamps: true }

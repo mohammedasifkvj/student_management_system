@@ -18,7 +18,7 @@ const taskSchema = new mongoose.Schema(
     },
     dueTime: {
       type: Date,
-      required: false
+      required: true
     },
     status: {
       type: String,
@@ -30,14 +30,6 @@ const taskSchema = new mongoose.Schema(
     timestamps: true
   }
 );
-
-// Pre-save middleware to check if the task is overdue
-taskSchema.pre('save', function (next) {
-  if (this.dueTime && new Date(this.dueTime) < new Date() && this.status === 'pending') {
-    this.status = 'overdue';
-  }
-  next();
-});
 
 const Task = mongoose.model('Task', taskSchema);
 
