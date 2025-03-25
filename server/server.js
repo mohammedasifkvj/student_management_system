@@ -21,7 +21,6 @@ app.use(cookieParser());
 
 const port = process.env.PORT;
 
-
 app.use('/api/admin', adminRoutes);
 app.use('/api/student', studentRoutes);
 

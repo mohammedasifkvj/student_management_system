@@ -72,12 +72,6 @@ import { useDispatch, useSelector } from 'react-redux';
           {loading ? 'Loading...' : 'Sign In'}
         </button>
       </form>
-      <div className='flex gap-2 mt-5'>
-        <p>Don't Have an Account?</p>
-        <Link to='/sign-up'>
-          <span className='text-blue-500'>Create an Account</span>
-        </Link>
-      </div>
     </div>
   );
 }
