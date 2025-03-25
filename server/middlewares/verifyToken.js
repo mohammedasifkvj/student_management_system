@@ -15,7 +15,7 @@ export const verifyUserToken = (req, res, next) => {
     });
 }
 
-export const verifyAdmin = (req, res, next) => {
+export const verifyAdminAndToken = (req, res, next) => {
     // console.log(req.cookies)
     const token = req.cookies.access_token;
 

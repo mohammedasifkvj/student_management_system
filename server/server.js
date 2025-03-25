@@ -8,6 +8,8 @@ import adminRoutes from './routes/adminRoute.js';
 import studentRoutes from './routes/studentRoute.js';
 import errorHandler from "./middlewares/errorHandler.js";
 
+import taskUpdater from "./cron-jobs/taskStatus.js"
+
 dotenv.config();
 connectDB();
 
