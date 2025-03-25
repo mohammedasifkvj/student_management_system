@@ -149,18 +149,18 @@ REACT_APP_API_URL=http://localhost:5000/api
 ### **Admin Routes**
 | Endpoint                  | Method | Description                         | Auth Required |
 |----------------------------|--------|------------------------------------|---------------|
-| `/api/admin/signin`        | POST   | Admin login                        | ❌            |
-| `/api/admin/createStudent` | POST   | Create a new student               | ✅            |
-| `/api/admin/assignTask`    | POST   | Assign task to a student           | ✅            |
-| `/api/admin/studentsList`  | GET    | Get all students                   | ✅            |
-| `/api/admin/showTask/:id`  | GET    | Get all tasks for a student        | ✅            |
+| `/api/admin/signin`        | POST   | Admin login                        | fals          |
+| `/api/admin/createStudent` | POST   | Create a new student               | true          |
+| `/api/admin/assignTask`    | POST   | Assign task to a student           | true          |
+| `/api/admin/studentsList`  | GET    | Get all students                   | true          |
+| `/api/admin/showTask/:id`  | GET    | Get all tasks for a student        | true          |
 
 ### **Student Routes**
-| Endpoint                   | Method | Description                         | Auth Required |
+| Endpoint                    | Method | Description                        | Auth Required |
 |-----------------------------|--------|------------------------------------|---------------|
-| `/api/student/signin`       | POST   | Student login                      | ❌            |
-| `/api/student/getTasks`     | GET    | View assigned tasks                | ✅            |
-|`/student/updateTask/:taskId`| PUT    | Mark task as completed             | ✅            |
+| `/api/student/signin`       | POST   | Student login                      | false         |
+| `/api/student/getTasks`     | GET    | View assigned tasks                | true          |
+|`/student/updateTask/:taskId`| PUT    | Mark task as completed             | true          |
 
 ---
 
@@ -170,13 +170,6 @@ REACT_APP_API_URL=http://localhost:5000/api
 - JWT-based authentication with expiration time  
 - Protected routes using **authMiddleware.js**  
 - CORS configuration for secure API access  
-
----
-
-## ⚡ **Future Enhancements**  
-- Add task notifications using WebSockets  
-- Implement admin dashboard with graphs and reports  
-- Add student profile management  
 
 ---
 

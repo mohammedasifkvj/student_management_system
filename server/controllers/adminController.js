@@ -19,7 +19,7 @@ export const adminSignup = async (req, res, next) => {
   }
 };
 
-export const adminSignin = async (req, res, next) => {
+export const adminSignin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const validAdmin = await Admin.findOne({ email });
@@ -44,12 +44,12 @@ export const adminSignin = async (req, res, next) => {
       .status(200)
       .json(rest);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 
 //create a new Student
-export const createStudent = async (req, res, next) => {
+export const createStudent = async (req, res) => {
   const { username, email,department, password } = req.body;
   try {
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -57,7 +57,8 @@ export const createStudent = async (req, res, next) => {
     await newStudent.save();
     res.status(201).json({ message: 'New Student created successfully' });
   } catch (error) {
-    next(error);
+    console.log(error);
+    
   }
 };
 
@@ -72,7 +73,7 @@ export const fetchStudents = async (req, res) => {
 };
 
 // Assign task
-export const assignTask = async (req, res, next) => {
+export const assignTask = async (req, res) => {
     console.log("data",req.body);
     
     const id=req.params.id
@@ -82,7 +83,7 @@ export const assignTask = async (req, res, next) => {
       await task.save();
       res.status(201).json({ message: 'Task created successfully' });
   } catch (error) {
-    next(error);
+   console.log(error);
   }
 };
 

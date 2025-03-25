@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import {
   updateTaskStart,
   updateTaskSuccess,
@@ -14,54 +15,50 @@ export default function Tasks() {
 
   const { currentUser, err } = useSelector((state) => state.user);
 
-  // Fetch tasks
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const res = await fetch(`/api/student/getTasks/${currentUser._id}`);
-        const data = await res.json();
-        if (data.success === false) {
-          return;
+        // Fetch tasks
+      useEffect(() => {
+        const fetchTasks = async () => {
+          try {
+            const res = await axios.get(`/api/student/getTasks/${currentUser._id}`);
+            if (res.data.success === false) {
+              return;
+            }
+            setTasks(res.data.tasks);
+          } catch (err) {
+            console.error('Error fetching tasks:', err);
+          }
+        };
+
+        fetchTasks();
+      }, []);
+
+  // Status update
+      const handleStatusChange = async (taskId) => {
+        dispatch(updateTaskStart());
+        setLoading(true);
+        try {
+          const res = await axios.patch(`/api/student/updateTask/${taskId}`, {
+            status: 'completed',
+          });
+
+          setLoading(false);
+          if (res.data.success === false) {
+            dispatch(updateTaskFailure(res.data.message));
+            return;
+          }
+          dispatch(updateTaskSuccess(res.data));
+          
+          // Update the task in local state to reflect the new status
+          setTasks(prevTasks =>
+            prevTasks.map(task =>
+              task._id === taskId ? { ...task, status: 'completed' } : task
+            )
+          );
+        } catch (error) {
+          setLoading(false);
+          dispatch(updateTaskFailure(error?.response?.data?.message || error.message));
         }
-        setTasks(data.tasks);
-      } catch (err) {
-        console.error('Error fetching tasks:', err);
-      }
-    };
-
-    fetchTasks();
-  }, []);
-
-  // status update
-  const handleStatusChange = async (taskId) => {
-    dispatch(updateTaskStart());
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/student/updateTask/${taskId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status: 'completed' })
-      });
-      const data = await res.json();
-      setLoading(false);
-      if (data.success === false) {
-        dispatch(updateTaskFailure(data.message));
-        return;
-      }
-      dispatch(updateTaskSuccess(data));
-      // Update the task in local state to reflect the new status
-      setTasks(prevTasks =>
-        prevTasks.map(task =>
-          task._id === taskId ? { ...task, status: 'completed' } : task
-        )
-      );
-    } catch (error) {
-      setLoading(false);
-      dispatch(updateTaskFailure(error.message));
-    }
-  };
+      };
 
   return (
     <div className='p-3 max-w-3xl mx-auto'>

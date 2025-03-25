@@ -1,3 +1,5 @@
+// redux/user/userSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -26,23 +28,11 @@ const userSlice = createSlice({
       state.loading = true;
     },
     updateTaskSuccess: (state, action) => {
-      state.currentUser = action.payload;
+      // Do not update currentUser here.
       state.loading = false;
       state.error = false;
     },
     updateTaskFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    deleteUserStart: (state) => {
-      state.loading = true;
-    },
-    deleteUserSuccess: (state) => {
-      state.currentUser = null;
-      state.loading = false;
-      state.error = false;
-    },
-    deleteUserFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -61,9 +51,6 @@ export const {
   updateTaskStart,
   updateTaskSuccess,
   updateTaskFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
   signOut,
 } = userSlice.actions;
 

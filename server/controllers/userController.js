@@ -5,7 +5,7 @@ import User from '../models/studentModel.js';
 import Task from '../models/taskModel.js';
 
 // Stdent login
-export const signin = async (req, res, next) => {
+export const signin = async (req, res) => {
     const { email, password } = req.body;
     try {
         const validUser = await User.findOne({ email });
@@ -26,7 +26,7 @@ export const signin = async (req, res, next) => {
             .status(200)
             .json(rest);
     } catch (error) {
-        next(error);
+        console.log(error);
     }
 };
 
