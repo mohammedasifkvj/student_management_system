@@ -114,7 +114,7 @@ REACT_APP_API_URL=http://localhost:5000/api
 1. **Clone the repository**  
     ```bash
     git clone https://github.com/mohammedasifkvj/student_management_system
-    cd student-management-system
+    cd student_management_system
     ```
 
 2. **Install Dependencies**  
