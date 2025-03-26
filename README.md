@@ -134,7 +134,7 @@ REACT_APP_API_URL=http://localhost:5000/api
 
 4. **Run the Application**  
     ```bash
-    # Run both frontend and backend
+    # Run both frontend and backend using the command from server folder
     npm run dev
     ```
 

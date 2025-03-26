@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { verifyAdminAndTokenAndToken } from '../middlewares/verifyToken.js'
+import { verifyAdminAndToken } from '../middlewares/verifyToken.js'
 import {
   adminSignup,
   adminSignin,

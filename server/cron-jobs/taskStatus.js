@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import Task from '../models/taskModel';
+import Task from '../models/taskModel.js';
 
 //task status 
 cron.schedule('0 0 * * *', async () => {
