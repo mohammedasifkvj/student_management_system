@@ -103,29 +103,30 @@ export default function StudentsList() {
             </h2>
 
             {tasks && tasks.length > 0 ? (
-              <ul className="space-y-4 ">
-                {tasks.map((task) => (
-                  <li key={task._id} className="p-4 border rounded-lg text-center">
-                    <h3 className="text-lg font-semibold">{task.taskName}</h3>
-                    <p className="text-gray-600">{task.description}</p>
-                    {task.dueTime && (
-                      <p className="text-sm text-gray-500">
-                        Due : {new Date(task.dueTime).toLocaleDateString()}
-                      </p>
-                    )}
-                    {/* Status with color coding */}
-                    <span
-                      className={`inline-block px-3 py-1 text-sm font-semibold text-white rounded-full
-                        ${task.status === 'pending' ? 'bg-yellow-500' : ''}
-                        ${task.status === 'completed' ? 'bg-green-500' : ''}
-                        ${task.status === 'overdue' ? 'bg-red-500' : ''}`}
-                    >
-                      {task.status.charAt(0).toUpperCase() +
-                        task.status.slice(1)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="max-h-80 overflow-y-auto">
+                <ul className="space-y-4">
+                  {tasks.map((task) => (
+                    <li key={task._id} className="p-4 border rounded-lg text-center">
+                      <h3 className="text-lg font-semibold">{task.taskName}</h3>
+                      <p className="text-gray-600">{task.description}</p>
+                      {task.dueTime && (
+                        <p className="text-sm text-gray-500">
+                          Due: {new Date(task.dueTime).toLocaleDateString()}
+                        </p>
+                      )}
+                      {/* Status with color coding */}
+                      <span
+                        className={`inline-block px-3 py-1 text-sm font-semibold text-white rounded-full
+                    ${task.status === 'pending' ? 'bg-yellow-500' : ''}
+                    ${task.status === 'completed' ? 'bg-green-500' : ''}
+                    ${task.status === 'overdue' ? 'bg-red-500' : ''}`}
+                      >
+                        {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ) : (
               <p className="text-gray-500">No tasks assigned.</p>
             )}

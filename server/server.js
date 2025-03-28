@@ -1,5 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet'
 
 import dotenv from './config/dotenv.js';
 import connectDB from './config/database.js';
@@ -20,6 +21,7 @@ app.use(corsConfig);
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());
 
 const port = process.env.PORT;
 
